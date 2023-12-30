@@ -23,16 +23,17 @@ class Overlay : Form
 
         Log("Initializing  Delegate..");
 
-        Focus(); // bring the overlay window into focus
+        Focus(); // bring the overlay window into focus (avoids it showing up behind the game)
 
-        // click through
         int initStyle = GetWindowLong(Handle, -20);
-        SetWindowLong(Handle, -20, initStyle | 0x80000 | 0x20);
+        SetWindowLong(Handle, -20, initStyle | 0x80000 | 0x20); // allows the user to click through the overlay even if its currently being drawn to
 
         overDel = new WinEventDelegate(OnAdjust);
 
         Log("Initializing  WinHooks..");
 
+        // hook OnAdjust window event delegare (cross thread event stuff for the window)
+        // hooks : WindowMoved, WindowClicked
         SetWinEventHook((uint)SWEH_Events.EVENT_OBJECT_LOCATIONCHANGE, (uint)SWEH_Events.EVENT_OBJECT_LOCATIONCHANGE, IntPtr.Zero, overDel, GameId, GetWindowThreadProcessId(WinHandle, IntPtr.Zero), (uint)SWEH_dwFlags.WINEVENT_OUTOFCONTEXT | (uint)SWEH_dwFlags.WINEVENT_SKIPOWNPROCESS | (uint)SWEH_dwFlags.WINEVENT_SKIPOWNTHREAD);
         SetWinEventHook((uint)SWEH_Events.EVENT_SYSTEM_FOREGROUND, (uint)SWEH_Events.EVENT_SYSTEM_FOREGROUND, IntPtr.Zero, overDel, 0, 0, (uint)SWEH_dwFlags.WINEVENT_OUTOFCONTEXT | (uint)SWEH_dwFlags.WINEVENT_SKIPOWNPROCESS | (uint)SWEH_dwFlags.WINEVENT_SKIPOWNTHREAD);
     }
