@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
-
+using System.Windows.Forms;
 using static User32;
 
 class BattlefieldClient
@@ -28,11 +28,22 @@ class BattlefieldClient
 
     public static void OpenGame()
     {
-        // locate rust in the memory
-        Process game = Process.GetProcessesByName(GameName)[0]; // oops title is Battlefield™ 2042
+        try
+        {
+            // locate rust in the memory
+            Process game = Process.GetProcessesByName(GameName)[0]; // oops title is Battlefield™ 2042
 
-        GameId = (uint)game.Id; // game id
-        WinHandle = game.MainWindowHandle; // window handle
+            GameId = (uint)game.Id; // game id
+            WinHandle = game.MainWindowHandle; // window handle
+        }
+        catch
+        {
+            Console.WriteLine("Please open the game first..");
+            Console.WriteLine("Press any key to continue");
+            Console.ReadKey();
+
+            Process.GetCurrentProcess().Kill();
+        }
     }
 
     public static ProcessRectangle GetGameRect()
@@ -43,6 +54,13 @@ class BattlefieldClient
 
         // return window dimensions
         return rect;
+    }
+
+    public static bool isGameFocused()
+    {
+        var sb = new StringBuilder(GameTitle.Length + 1);
+        GetWindowText(GetForegroundWindow(), sb, GameTitle.Length + 1);
+        return sb.ToString().CompareTo(GameTitle) == 0;
     }
 
     public static IntPtr IsGameFocusedInsert()
