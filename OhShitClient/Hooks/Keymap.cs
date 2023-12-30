@@ -23,6 +23,22 @@ internal class Keymap
     private readonly Dictionary<char, uint> _rBuff = new Dictionary<char, uint>();
     private readonly Dictionary<char, bool> _yesKey = new Dictionary<char, bool>();
 
+    public static bool IsCursorVisible()
+    {
+        CURSORINFO cursorInfo = new CURSORINFO();
+        cursorInfo.cbSize = Marshal.SizeOf(typeof(CURSORINFO));
+
+        if (User32.GetCursorInfo(out cursorInfo))
+            return (cursorInfo.flags & 0x00000001) == 0;
+
+        return true;
+    }
+
+    public static bool GetDown(Keys key)
+    {
+        return handle._dBuff[(char)key] > 0;
+    }
+
     public Keymap()
     {
         handle = this;

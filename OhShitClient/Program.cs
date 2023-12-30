@@ -13,7 +13,7 @@ class Program
         // get the information we need from rust for our WinHooks
         BattlefieldClient.OpenGame();
 
-        Task.Factory.StartNew(() =>
+        Task.Factory.StartNew(() => // runs 66 & a half times a second
         {
             while (true) // Background thread stuff
             {
@@ -33,13 +33,17 @@ class Program
         new Keymap(); // init keymap
         Keymap.keyEvent += OnKey;
 
-        // just gonna start it cuz we're not injecting anything so no need for multi-thread
+        // init overlay
         Application.Run(new Overlay());
     }
 
     private static void OnKey(object sender, KeyEvent e)
     {
-        if (e.vkey != VKeyCodes.KeyHeld)
-            Console.WriteLine($"{e.vkey} {e.key}");
+        //if (e.vkey != VKeyCodes.KeyHeld)
+        //    Console.WriteLine($"{e.vkey} {e.key}");
+
+        if (e.vkey == VKeyCodes.KeyDown)
+            if (e.key == Keys.L && Keymap.GetDown(Keys.ControlKey))
+                Process.GetCurrentProcess().Kill(); // "eject"
     }
 }

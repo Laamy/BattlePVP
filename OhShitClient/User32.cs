@@ -1,9 +1,26 @@
 ﻿using static Overlay;
+using static BattlefieldClient;
+
 using System.Runtime.InteropServices;
 using System;
-using static BattlefieldClient;
 using System.Text;
 using System.Windows.Forms;
+
+[StructLayout(LayoutKind.Sequential)]
+public struct CURSORINFO
+{
+    public Int32 cbSize;
+    public Int32 flags;
+    public IntPtr hCursor;
+    public POINTAPI ptScreenPos;
+}
+
+[StructLayout(LayoutKind.Sequential)]
+public struct POINTAPI
+{
+    public int x;
+    public int y;
+}
 
 class User32
 {
@@ -32,11 +49,13 @@ class User32
     [DllImport("user32.dll")]
     public static extern bool GetAsyncKeyState(char v);
 
-    [DllImport("user32.dll")]
+    [DllImport("User32.dll")]
     public static extern bool GetAsyncKeyState(Keys v);
 
-    [DllImport("user32.dll")]
+    [DllImport("User32.dll")]
     public static extern bool GetAsyncKeyState(int v);
+    [DllImport("User32.dll")]
+    public static extern bool GetCursorInfo(out CURSORINFO pci);
 
     [DllImport("User32.dll")]
     public static extern IntPtr GetForegroundWindow();

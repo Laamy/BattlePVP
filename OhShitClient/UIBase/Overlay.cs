@@ -40,8 +40,11 @@ class Overlay : Form
 
     public void OnUpdate(object sender, PaintEventArgs e)
     {
-        // lets quickly draw a test crosshair
+        // lets check if the cursor is visible if so then we dont draw a crosshair
+        if (Keymap.IsCursorVisible())
+            return;
 
+        // lets quickly draw a test crosshair
         Graphics g = e.Graphics;
 
         int centerX = e.ClipRectangle.Width / 2;
