@@ -40,6 +40,8 @@ class Overlay : Form
 
     public void OnUpdate(object sender, PaintEventArgs e)
     {
+        // lets quickly draw a test crosshair
+
         Graphics g = e.Graphics;
 
         int centerX = e.ClipRectangle.Width / 2;
@@ -48,7 +50,6 @@ class Overlay : Form
         Pen pen = new Pen(Color.Green, 2);
 
         g.DrawLine(pen, centerX - 4, centerY, centerX + 4, centerY);
-
         g.DrawLine(pen, centerX, centerY - 4, centerX, centerY + 4);
     }
 
@@ -67,13 +68,16 @@ class Overlay : Form
 
     public void OnAdjust(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime)
     {
+        // get the rough dimensions of the window
         ProcessRectangle rect = GetGameRect();
 
-        int x = rect.Left; // wont do fullscreen yet
+        // Doesnt support maximized window
+        int x = rect.Left; // this should cover when your dragging the window around and alt + enter (f11) fullscreen
         int y = rect.Top;
         int width = rect.Right - rect.Left;
         int height = rect.Bottom - rect.Top;
 
-        SetWindowPos(Handle, IsGameFocusedInsert(), x, y, width, height, 0x40); // might be working
+        // set the window where the battlefield game is (while also ontop)
+        SetWindowPos(Handle, IsGameFocusedInsert(), x, y, width, height, 0x40);
     }
 }
