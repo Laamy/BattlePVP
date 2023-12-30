@@ -39,80 +39,47 @@ internal class Keymap
 
     private void keyTick(object sender, EventArgs e)
     {
-        try
+        for (var c = (char)0; c < 0xFF; c++)
         {
-            // ++e;
-            for (var c = (char)0; c < 0xFF; c++)
-            {
-                _noKey[c] = true;
-                _yesKey[c] = false;
-                if (GetAsyncKeyState(c))
-                {
-                    if (keyEvent != null)
-                        if (BattlefieldClient.isGameFocused())
-                            keyEvent.Invoke(this, new KeyEvent(c, VKeyCodes.KeyHeld));
-                    //globalKeyEvent.Invoke(this, new KeyEvent(c, vKeyCodes.KeyHeld));
-                    // ++e;
-                    _noKey[c] = false;
-                    if (_dBuff[c] > 0)
-                        continue;
-                    _dBuff[c]++;
-                    try
-                    {
-                        if (keyEvent != null)
-                            if (BattlefieldClient.isGameFocused())
-                                keyEvent.Invoke(this, new KeyEvent(c, VKeyCodes.KeyDown));
-                        //globalKeyEvent.Invoke(this, new KeyEvent(c, vKeyCodes.KeyDown));
-                        // ++e;
-                    }
-                    catch
-                    {
-                    }
-                }
-                else
-                {
-                    _yesKey[c] = true;
-                    if (_rBuff[c] > 0)
-                        continue;
-                    _rBuff[c]++;
-                    try
-                    {
-                        if (keyEvent != null)
-                            if (BattlefieldClient.isGameFocused())
-                                keyEvent.Invoke(this, new KeyEvent(c, VKeyCodes.KeyUp));
-                        //globalKeyEvent.Invoke(this, new KeyEvent(c, vKeyCodes.KeyUp));
-                        // ++e;
-                    }
-                    catch
-                    {
-                    }
-                }
+            _noKey[c] = true;
+            _yesKey[c] = false;
 
-                if (_noKey[c])
-                    _dBuff[c] = 0;
-                if (!_yesKey[c])
-                    _rBuff[c] = 0;
+            if (User32.GetAsyncKeyState(c))
+            {
+                if (keyEvent != null)
+                    if (BattlefieldClient.isGameFocused())
+                        keyEvent.Invoke(this, new KeyEvent(c, VKeyCodes.KeyHeld));
+
+                if (_dBuff[c] > 0)
+                    continue;
+
+                _dBuff[c]++;
+                _noKey[c] = false;
+
+                if (keyEvent != null)
+                    if (BattlefieldClient.isGameFocused())
+                        keyEvent.Invoke(this, new KeyEvent(c, VKeyCodes.KeyDown));
             }
-        }
-        catch
-        {
+            else
+            {
+                if (_rBuff[c] > 0)
+                    continue;
+
+                _rBuff[c]++;
+                _yesKey[c] = true;
+
+                if (keyEvent != null)
+                    if (BattlefieldClient.isGameFocused())
+                        keyEvent.Invoke(this, new KeyEvent(c, VKeyCodes.KeyUp));
+            }
+
+            if (_noKey[c])
+                _dBuff[c] = 0;
+
+            if (!_yesKey[c])
+                _rBuff[c] = 0;
         }
     }
-
-    [DllImport("user32.dll")]
-    public static extern bool GetAsyncKeyState(char v);
-
-    [DllImport("user32.dll")]
-    public static extern bool GetAsyncKeyState(Keys v);
-
-    [DllImport("user32.dll")]
-    public static extern bool GetAsyncKeyState(int v);
-
-    [DllImport("user32.dll")]
-    private static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
-
-    [DllImport("user32.dll")]
-    private static extern IntPtr GetForegroundWindow();
 }
 
 public class KeyEvent : EventArgs // flare's key events

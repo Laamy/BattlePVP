@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 using System;
 using static BattlefieldClient;
 using System.Text;
+using System.Windows.Forms;
 
 class User32
 {
@@ -27,7 +28,16 @@ class User32
 
     [DllImport("User32.dll")]
     public static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
-    
+
+    [DllImport("user32.dll")]
+    public static extern bool GetAsyncKeyState(char v);
+
+    [DllImport("user32.dll")]
+    public static extern bool GetAsyncKeyState(Keys v);
+
+    [DllImport("user32.dll")]
+    public static extern bool GetAsyncKeyState(int v);
+
     [DllImport("User32.dll")]
     public static extern IntPtr GetForegroundWindow();
 }

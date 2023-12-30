@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 class Program
 {
-    public static EventHandler BackgroundTick;
+    public static EventHandler<EventArgs> BackgroundTick;
 
     static void Main(string[] args)
     {
@@ -22,7 +22,7 @@ class Program
 
                 // tick all the background stuff like keymap
                 if (BackgroundTick != null)
-                    BackgroundTick.Invoke(null, null);
+                    BackgroundTick.Invoke(null, new EventArgs());
 
                 // check if the game closed
                 if (Process.GetProcessesByName(BattlefieldClient.GameName).Length < 1)
@@ -30,7 +30,16 @@ class Program
             }
         });
 
+        new Keymap(); // init keymap
+        Keymap.keyEvent += OnKey;
+
         // just gonna start it cuz we're not injecting anything so no need for multi-thread
         Application.Run(new Overlay());
+    }
+
+    private static void OnKey(object sender, KeyEvent e)
+    {
+        if (e.vkey != VKeyCodes.KeyHeld)
+            Console.WriteLine($"{e.vkey} {e.key}");
     }
 }
