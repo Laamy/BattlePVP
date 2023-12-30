@@ -29,7 +29,7 @@ internal class Keymap
         cursorInfo.cbSize = Marshal.SizeOf(typeof(CURSORINFO));
 
         if (User32.GetCursorInfo(out cursorInfo))
-            return (cursorInfo.flags & 0x00000001) == 0;
+            return (cursorInfo.flags & 0x00000001) != 0;
 
         return true;
     }

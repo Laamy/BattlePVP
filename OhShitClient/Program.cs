@@ -13,12 +13,24 @@ class Program
         // get the information we need from rust for our WinHooks
         BattlefieldClient.OpenGame();
 
+        bool lastVis = Keymap.IsCursorVisible();
         Task.Factory.StartNew(() => // runs 66 & a half times a second
         {
             while (true) // Background thread stuff
             {
                 // C# likes to use all the cpu so lets limit it to once per 15ms (as that what the C# timer is normally set to)
                 Thread.Sleep(1);
+
+                // debug stuff
+                {
+                    //Console.WriteLine(Keymap.IsCursorVisible());
+                }
+
+                if (lastVis != Keymap.IsCursorVisible())
+                {
+                    Overlay.handle.Invalidate();
+                    lastVis = Keymap.IsCursorVisible();
+                }
 
                 // tick all the background stuff like keymap
                 if (BackgroundTick != null)

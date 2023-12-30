@@ -12,11 +12,15 @@ class Overlay : Form
 
     public static WinEventDelegate overDel;
 
+    public static Overlay handle;
+
     public Overlay()
     {
         Log("Initializing  UI..");
 
         InitializeComponents();
+
+        handle = this;
 
         Log("Initializing  Paint Hooks..");
         Paint += OnUpdate;
@@ -41,7 +45,7 @@ class Overlay : Form
     public void OnUpdate(object sender, PaintEventArgs e)
     {
         // lets check if the cursor is visible if so then we dont draw a crosshair
-        if (Keymap.IsCursorVisible())
+        if (Keymap.IsCursorVisible() == true) // || Keymap.GetDown(Keys.Tab) later ig
             return;
 
         // lets quickly draw a test crosshair
