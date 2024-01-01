@@ -1,15 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 using static User32;
 
+/// <summary>
+/// Information about battlefield like its process ID
+/// </summary>
 class BattlefieldClient
 {
-    // information about battlefield like its process ID
-
     /// <summary>
     /// Unsigned int (To store the battlefield handle in for winhooks)
     /// </summary>
@@ -21,16 +22,112 @@ class BattlefieldClient
     public static IntPtr WinHandle;
 
     /// <summary>
-    /// Name of the game
+    /// Executable name of the game
     /// </summary>
     public static string GameName = "BF2042";
+
+    /// <summary>
+    /// Title name of the game
+    /// </summary>
     public static string GameTitle = "Battlefield™ 2042";
 
-    public static void OpenGame()
+    /// <summary>
+    /// Get information about the game keymap & events
+    /// </summary>
+    public static Keymap Keymap = new Keymap();
+
+    /// <summary>
+    /// Variable for if the game is focused or not
+    /// </summary>
+    public static bool isFocused
     {
+        get
+        {
+            CreateInstance(); // check create
+
+            var sb = new StringBuilder(GameTitle.Length + 1);
+            GetWindowText(GetForegroundWindow(), sb, GameTitle.Length + 1);
+            return sb.ToString().CompareTo(GameTitle) == 0;
+        }
+    }
+
+    /// <summary>
+    /// Variable for if the game is focused or not insert
+    /// </summary>
+    public static IntPtr isFocusedInsert
+    {
+        get
+        {
+            CreateInstance(); // check create
+
+            if (isFocused)
+                return (IntPtr)(-1);
+            return (IntPtr)(-2);
+        }
+    }
+
+    /// <summary>
+    /// Window dimensions
+    /// </summary>
+    public static ProcessRectangle WindowDims
+    {
+        get
+        {
+            CreateInstance(); // check create
+
+            ProcessRectangle rect;
+            GetWindowRect(WinHandle, out rect);
+
+            return rect;
+        }
+    }
+
+    /// <summary>
+    /// If the user is able to use the movement keys or not
+    /// </summary>
+    /// <returns></returns>
+    public static bool CanUseMoveKeys
+    {
+        get
+        {
+            CURSORINFO cursorInfo = new CURSORINFO();
+            cursorInfo.cbSize = Marshal.SizeOf(typeof(CURSORINFO));
+
+            if (User32.GetCursorInfo(out cursorInfo))
+                return (cursorInfo.flags & 0x00000001) != 0;
+
+            return true;
+        }
+    }
+
+    /// <summary>
+    /// doesnt work rn
+    /// </summary>
+    /// <param name="command"></param>
+    public static void SendCommand(string command)
+    {
+        if (isFocused)
+        {
+            Keymap.SimulatePress(192);
+            Keymap.SimulateRelease(192);
+
+            //SendKeys.SendWait(command);
+            //SendKeys.SendWait(((char)Keys.Oemtilde).ToString());
+        }
+        else Console.WriteLine("Need to be in focus to send game commands");
+    }
+
+    /// <summary>
+    /// Locate the game and setup the game interface instance
+    /// </summary>
+    public static void CreateInstance()
+    {
+        if (GameId != 0)
+            return;
+
         try
         {
-            // locate rust in the memory
+            // locate battlefield in the memory
             Process game = Process.GetProcessesByName(GameName)[0]; // oops title is Battlefield™ 2042
 
             GameId = (uint)game.Id; // game id
@@ -45,74 +142,4 @@ class BattlefieldClient
             Process.GetCurrentProcess().Kill();
         }
     }
-    
-    //public static Bitmap Capture()
-    //{
-    //    return GDI32.CaptureWindow(WinHandle);
-    //}
-
-    public static ProcessRectangle GetGameRect()
-    {
-        // get window rect into "rect" variable
-        ProcessRectangle rect;
-        User32.GetWindowRect(WinHandle, out rect);
-
-        // return window dimensions
-        return rect;
-    }
-
-    public static bool isGameFocused()
-    {
-        var sb = new StringBuilder(GameTitle.Length + 1);
-        GetWindowText(GetForegroundWindow(), sb, GameTitle.Length + 1);
-        return sb.ToString().CompareTo(GameTitle) == 0;
-    }
-
-    public static IntPtr IsGameFocusedInsert()
-    {
-        var sb = new StringBuilder(GameTitle.Length + 1);
-        GetWindowText(GetForegroundWindow(), sb, GameTitle.Length + 1);
-        if (sb.ToString() == GameTitle)
-            return (IntPtr)(-1);
-        return (IntPtr)(-2);
-    }
-
-    #region Structs
-    /// <summary>
-    /// Window Rectangle
-    /// </summary>
-    [StructLayout(LayoutKind.Sequential)]
-    public struct ProcessRectangle
-    {
-        public int Left;
-        public int Top;
-        public int Right;
-        public int Bottom;
-        public ProcessRectangle(Point position, Point size) // this is most likely wrong
-        {
-            this.Left = position.X;
-            this.Top = position.X + size.X;
-            this.Right = position.Y;
-            this.Bottom = position.Y + size.Y;
-
-            // Left, Top, Right, Bottom
-            // X, X - X, Y, Y - Y
-
-            // Left, Top,
-            // Right, Bottom
-            // X, X - X,
-            // Y, Y - Y
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (obj == null || GetType() != obj.GetType())
-                return false;
-
-            ProcessRectangle a2 = (ProcessRectangle)obj;
-
-            return Left == a2.Left && Top == a2.Top && Right == a2.Right && Bottom == a2.Bottom;
-        }
-    }
-    #endregion
 }

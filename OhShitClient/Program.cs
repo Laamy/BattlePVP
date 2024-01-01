@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Diagnostics.Eventing.Reader;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -27,10 +26,10 @@ class Program
         Kernel32.SetDllDirectory("BattlePVP_Data\\bin");
 
         // get the information we need from rust for our WinHooks
-        BattlefieldClient.OpenGame();
+        BattlefieldClient.CreateInstance();
         bool dsa = false;
 
-        bool lastVis = Keymap.CanUseMoveKeys();
+        bool lastVis = BattlefieldClient.CanUseMoveKeys;
         Task.Factory.StartNew(() => // runs 66 & a half times a second
         {
             while (true) // Background thread stuff
@@ -47,10 +46,10 @@ class Program
                     //Console.WriteLine(Keymap.IsCursorVisible());
                 }
 
-                if (Overlay.handle != null && lastVis != Keymap.CanUseMoveKeys())
+                if (Overlay.handle != null && lastVis != BattlefieldClient.CanUseMoveKeys)
                 {
                     Overlay.handle.Invalidate();
-                    lastVis = Keymap.CanUseMoveKeys();
+                    lastVis = BattlefieldClient.CanUseMoveKeys;
                 }
 
                 // tick all the background stuff like keymap
@@ -59,8 +58,7 @@ class Program
             }
         });
 
-        new Keymap(); // init keymap
-        Keymap.keyEvent += OnKey;
+        BattlefieldClient.Keymap.OnKeyEvent += OnKey;
 
         // init overlay
         Application.Run(new Overlay());
@@ -68,11 +66,16 @@ class Program
 
     private static void OnKey(object sender, KeyEvent e)
     {
-        //if (e.vkey != VKeyCodes.KeyHeld)
-        //    Console.WriteLine($"{e.vkey} {e.key}");
+        if (e.vkey != VKeyCodes.KeyHeld)
+            Console.WriteLine($"{e.vkey} {e.key}:{(int)e.key}");
 
         if (e.vkey == VKeyCodes.KeyDown)
+        {
             if (e.key == Keys.L && Keymap.GetDown(Keys.ControlKey))
                 Process.GetCurrentProcess().Kill(); // "eject"
+
+            if (e.key == Keys.NumPad0)
+                BattlefieldClient.SendCommand("Render.ResolutionScale 0.1"); // test rq
+        }
     }
 }

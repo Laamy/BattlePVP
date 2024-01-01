@@ -2,10 +2,8 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-using static BattlefieldClient;
 using static User32;
 using static Debug;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace OhShitClient.UIBase
 {
@@ -45,7 +43,7 @@ namespace OhShitClient.UIBase
             WinGraphics.InitDelegate(this.Handle); // hook the window event via delegate
 
             {
-                ProcessRectangle rect = GetGameRect();
+                ProcessRectangle rect = BattlefieldClient.WindowDims;
 
                 int x = rect.Left;
                 int y = rect.Top;
@@ -74,7 +72,7 @@ namespace OhShitClient.UIBase
 
             FormBorderStyle = FormBorderStyle.None;
 
-            Text = GameTitle;
+            Text = BattlefieldClient.GameTitle;
 
             DoubleBuffered = true; // no tearing cuz this is gay
         }
@@ -84,7 +82,7 @@ namespace OhShitClient.UIBase
             if (relative == null)
                 return;
 
-            ProcessRectangle rect = GetGameRect();
+            ProcessRectangle rect = BattlefieldClient.WindowDims;
 
             int x = rect.Left;
             int y = rect.Top;
@@ -102,7 +100,7 @@ namespace OhShitClient.UIBase
         public void OnAdjust(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime)
         {
             // get the rough dimensions of the window
-            ProcessRectangle rect = GetGameRect();
+            ProcessRectangle rect = BattlefieldClient.WindowDims;
             //rect = old;
 
             // Doesnt support maximized window
@@ -112,7 +110,7 @@ namespace OhShitClient.UIBase
             if (Location != new Point(x + relative.X, y + relative.Y))
             {
                 Move -= OnMove;
-                SetWindowPos(Handle, IsGameFocusedInsert(), x + relative.X, y + relative.Y, Size.Width, Size.Height, 0x40);
+                SetWindowPos(Handle, BattlefieldClient.isFocusedInsert, x + relative.X, y + relative.Y, Size.Width, Size.Height, 0x40);
                 Move += OnMove;
             }
         }

@@ -1,15 +1,8 @@
 ﻿using System;
 using System.Windows.Forms;
 using System.Drawing;
-
-using OhShitClient.UIBase;
-
-using static BattlefieldClient;
 using static User32;
 using static Debug;
-
-using SDL2;
-using System.Drawing.Imaging;
 
 class Overlay : Form
 {
@@ -106,7 +99,7 @@ class Overlay : Form
         Graphics g = e.Graphics;
 
         // lets check if the cursor is visible if so then we dont draw a crosshair
-        if (Keymap.CanUseMoveKeys() == true) // || Keymap.GetDown(Keys.Tab) later ig
+        if (BattlefieldClient.CanUseMoveKeys == true) // || Keymap.GetDown(Keys.Tab) later ig
             return;
 
         // lets quickly draw a test crosshair
@@ -127,7 +120,7 @@ class Overlay : Form
 
         FormBorderStyle = FormBorderStyle.None;
 
-        Text = GameTitle;
+        Text = BattlefieldClient.GameTitle;
 
         DoubleBuffered = true; // no tearing cuz this is gay
     }
@@ -135,7 +128,7 @@ class Overlay : Form
     public void OnAdjust(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime)
     {
         // get the rough dimensions of the window
-        ProcessRectangle rect = GetGameRect();
+        ProcessRectangle rect = BattlefieldClient.WindowDims;
 
         // Doesnt support maximized window
         int x = rect.Left; // this should cover when your dragging the window around and alt + enter (f11) fullscreen
@@ -144,6 +137,6 @@ class Overlay : Form
         int height = rect.Bottom - rect.Top;
 
         // set the window where the battlefield game is (while also ontop)
-        SetWindowPos(Handle, IsGameFocusedInsert(), x, y, width, height, 0x40);
+        SetWindowPos(Handle, BattlefieldClient.isFocusedInsert, x, y, width, height, 0x40);
     }
 }

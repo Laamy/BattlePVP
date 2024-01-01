@@ -3,7 +3,6 @@ using System;
 using System.Drawing;
 
 using static User32;
-using static BattlefieldClient;
 
 public enum RasterOp : uint
 {
