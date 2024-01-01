@@ -23,7 +23,7 @@ internal class Keymap
     private readonly Dictionary<char, uint> _rBuff = new Dictionary<char, uint>();
     private readonly Dictionary<char, bool> _yesKey = new Dictionary<char, bool>();
 
-    public static bool IsCursorVisible()
+    public static bool CanUseMoveKeys()
     {
         CURSORINFO cursorInfo = new CURSORINFO();
         cursorInfo.cbSize = Marshal.SizeOf(typeof(CURSORINFO));

@@ -45,6 +45,11 @@ class BattlefieldClient
             Process.GetCurrentProcess().Kill();
         }
     }
+    
+    //public static Bitmap Capture()
+    //{
+    //    return GDI32.CaptureWindow(WinHandle);
+    //}
 
     public static ProcessRectangle GetGameRect()
     {
@@ -97,6 +102,16 @@ class BattlefieldClient
             // Right, Bottom
             // X, X - X,
             // Y, Y - Y
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null || GetType() != obj.GetType())
+                return false;
+
+            ProcessRectangle a2 = (ProcessRectangle)obj;
+
+            return Left == a2.Left && Top == a2.Top && Right == a2.Right && Bottom == a2.Bottom;
         }
     }
     #endregion

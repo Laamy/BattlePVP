@@ -1,5 +1,4 @@
 ﻿// copied from my old trero cheat | https://github.com/Laamy/Trero/blob/master/Trero/ClientBase/UIBase/WinHooks.cs
-
 public enum SWEH_dwFlags : uint
 {
     WINEVENT_OUTOFCONTEXT = 0x0000,     // Events are ASYNC

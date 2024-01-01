@@ -50,13 +50,17 @@ class User32
     public static extern bool GetAsyncKeyState(char v);
 
     [DllImport("User32.dll")]
-    public static extern bool GetAsyncKeyState(Keys v);
-
-    [DllImport("User32.dll")]
-    public static extern bool GetAsyncKeyState(int v);
-    [DllImport("User32.dll")]
     public static extern bool GetCursorInfo(out CURSORINFO pci);
 
     [DllImport("User32.dll")]
+    public static extern bool ReleaseCapture();
+
+    [DllImport("User32.dll")]
+    public static extern bool SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
+
+    [DllImport("User32.dll")]
     public static extern IntPtr GetForegroundWindow();
+
+    [DllImport("User32.dll")]
+    public static extern IntPtr SetParent(IntPtr hWndChild, IntPtr hWndNewParent);
 }
