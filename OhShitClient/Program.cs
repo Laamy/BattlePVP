@@ -74,8 +74,8 @@ class Program
             if (e.key == Keys.L && Keymap.GetDown(Keys.ControlKey))
                 Process.GetCurrentProcess().Kill(); // "eject"
 
-            if (e.key == Keys.NumPad0)
-                BattlefieldClient.SendCommand("Render.ResolutionScale 0.1"); // test rq
+            //if (e.key == Keys.NumPad0)
+            //    BattlefieldClient.SendCommand("Render.ResolutionScale 0.1"); // test rq
         }
     }
 }
