@@ -194,7 +194,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BattlefieldClient.cs" />
-    <Compile Include="BattleLeviathan_Data\Window\ProcessRectangle.cs">
+    <Compile Include="BattleLeviathan_Data\structs\ProcessRectangle.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Debug.cs" />
