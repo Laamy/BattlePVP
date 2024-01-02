@@ -14,9 +14,9 @@ internal class Keymap // now its not as dog balls as the last one
 
     private readonly Dictionary<char, bool> prevBuff = new Dictionary<char, bool>();
 
-    public static bool GetDown(Keys key)
+    public bool GetDown(Keys key)
     {
-        return BattlefieldClient.Keymap.prevBuff[(char)key];
+        return prevBuff[(char)key];
     }
 
     public Keymap()

@@ -35,6 +35,11 @@ class BattlefieldClient
     /// Get information about the game keymap & events
     /// </summary>
     public static Keymap Keymap = new Keymap();
+    
+    /// <summary>
+    /// Custom commands manager for the custom console
+    /// </summary>
+    public static CommandManager CommandManager = new CommandManager();
 
     /// <summary>
     /// Variable for if the game is focused or not
@@ -138,6 +143,8 @@ class BattlefieldClient
     {
         if (GameId != 0)
             return;
+
+        CommandManager.Init();
 
         try
         {

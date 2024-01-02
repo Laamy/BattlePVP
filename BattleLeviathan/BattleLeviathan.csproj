@@ -194,6 +194,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BattlefieldClient.cs" />
+    <Compile Include="Command\Command.cs" />
+    <Compile Include="Command\Commands\CommandManager.cs" />
+    <Compile Include="Command\Commands\HelpCommand.cs" />
     <Compile Include="SDK\ProcessRectangle.cs" />
     <Compile Include="Debug.cs" />
     <Compile Include="Environment.cs" />
@@ -211,10 +214,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="BattleLeviathan_Data\assets\fonts\vgasys.fon">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="BattleLeviathan_Data\assets\" />
     <Folder Include="BattleLeviathan_Data\bin\" />
     <Folder Include="BattleLeviathan_Data\scenedb\" />
   </ItemGroup>

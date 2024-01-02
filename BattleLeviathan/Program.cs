@@ -5,6 +5,8 @@ using System.Threading;
 
 class Program
 {
+    public static bool CmdBar = false;
+
     static void Main()
     {
         // init binarys n assets
@@ -46,8 +48,34 @@ class Program
 
         if (e.vkey == VKeyCodes.KeyDown)
         {
-            if (e.key == Keys.L && Keymap.GetDown(Keys.ControlKey))
+            if (e.key == Keys.L && BattlefieldClient.Keymap.GetDown(Keys.ControlKey))
                 Process.GetCurrentProcess().Kill(); 
+
+            if (e.key == Keys.F1)
+                CmdBar = !CmdBar;
+
+            if (CmdBar) // textbox stuff
+            {
+                if (e.key.ToString().Length == 1)
+                {
+                    if (BattlefieldClient.Keymap.GetDown(Keys.ShiftKey))
+                        Overlay.command += e.key.ToString().ToUpper();
+                    else
+                        Overlay.command += e.key.ToString().ToLower();
+                }
+
+                if (e.key == Keys.Space)
+                    Overlay.command += " ";
+
+                if (e.key == Keys.Back && Overlay.command.Length > 0)
+                    Overlay.command = Overlay.command.Substring(0, Overlay.command.Length - 1);
+
+                if (e.key == Keys.Enter)
+                {
+                    BattlefieldClient.CommandManager.SendCommand(Overlay.command);
+                    Overlay.command = "";
+                }
+            }
         }
     }
 }

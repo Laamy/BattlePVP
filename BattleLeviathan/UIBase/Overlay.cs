@@ -13,7 +13,6 @@ using TextAntialiasMode = SharpDX.Direct2D1.TextAntialiasMode;
 
 using static User32;
 using static Debug;
-using System.Management.Instrumentation;
 
 class Overlay : Form
 {
@@ -21,6 +20,8 @@ class Overlay : Form
 
     private RenderContext context;
     //private BitmapRenderTarget backTarget;
+
+    public static string command = "";
 
     public Overlay()
     {
@@ -71,7 +72,7 @@ class Overlay : Form
     {
         // initialize winform here
         TopMost = true; // not needed
-        TransparencyKey = System.Drawing.Color.White;
+        TransparencyKey = System.Drawing.Color.Magenta;
         //Opacity = 1;
 
         FormBorderStyle = FormBorderStyle.None;
@@ -91,10 +92,10 @@ class Overlay : Form
     private void OnUpdate() // OnUpdate
     {
         context.Begin();
-        context.Clear(Color.White);
+        context.Clear(Color.Magenta);
 
         // lets check if the cursor is visible if so then we dont draw a crosshair
-        if (BattlefieldClient.CanUseMoveKeys && !Keymap.GetDown(Keys.Tab)) // || Keymap.GetDown(Keys.Tab) later ig
+        if (BattlefieldClient.CanUseMoveKeys && !BattlefieldClient.Keymap.GetDown(Keys.Tab)) // || Keymap.GetDown(Keys.Tab) later ig
         {
             // lets quickly draw a test crosshair
             int centerX = ClientSize.Width / 2;
@@ -106,7 +107,22 @@ class Overlay : Form
             context.DrawLine(new Vector2(centerX, centerY - 4), new Vector2(centerX, centerY + 4), green, 2);
         }
 
-        context.DrawString("DEBUG MODE ACTIVE", new Vector2(10, 10), new Color4(1, 0, 0, 1), "Arial", 24);
+        if (Program.CmdBar)
+        {
+            // console title
+            context.FillRectangle(new Vector2(30,30), new Vector2(150, 18), Color4.White);
+
+            // shadow'd string
+            context.DrawString("Console", new Vector2(39, 30), new Color4(0.3f, 0.3f, 0.3f, 1), "System", 12);
+            context.DrawString("Console", new Vector2(40, 31), Color.Black, "System", 12);
+
+            context.FillRectangle(new Vector2(30, 48), new Vector2(970, 52), new Color4(0.3f, 0.3f, 0.3f, 1));
+
+            context.DrawString("> " + command, new Vector2(39, 54), Color.Black, "System", 24);
+            context.DrawString("> " + command, new Vector2(40, 55), Color.White, "System", 24);
+        }
+
+        //context.DrawString("DEBUG MODE ACTIVE", new Vector2(10, 10), new Color4(1, 0, 0, 1), "Arial", 24);
 
         context.End();
     }

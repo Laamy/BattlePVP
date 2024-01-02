@@ -1,13 +1,18 @@
-﻿using System.IO;
-using System.Reflection;
-using System.Runtime.Hosting;
+﻿using System.Collections.Generic;
+using System.Drawing.Text;
+using System.Linq;
 using System.Windows.Forms;
 
 class Environment
 {
-    private static string data = "BattleLeviathan_Data\\";
+    private static string data = Application.StartupPath + "\\BattleLeviathan_Data\\";
 
     private static string bin = data + "bin\\";
+
+    private static string assets = data + "assets\\";
+    private static string fonts = assets + "fonts\\";
+
+    public static List<System.Drawing.FontFamily> _fonts = new List<System.Drawing.FontFamily>();
 
     private static void LoadBin()
     {
@@ -27,5 +32,23 @@ class Environment
     public static void Initialize()
     {
         LoadBin();
+        //LoadFonts();
+    }
+
+    private static void LoadFont(string file)
+    {
+        var fontCollection = new PrivateFontCollection();
+        fontCollection.AddFontFile(fonts + file);
+
+        _fonts.Add(fontCollection.Families[0]);
+
+        Debug.Log(_fonts.LastOrDefault().Name);
+    }
+
+    private static void LoadFonts()
+    {
+        LoadFont("vgasys.fon");
+
+        //var customFontTextFormat = new TextFormat(new Factory(), fontCollection.Families[0].Name, FontWeight.Normal, FontStyle.Normal, FontStretch.Normal, 12);
     }
 }
