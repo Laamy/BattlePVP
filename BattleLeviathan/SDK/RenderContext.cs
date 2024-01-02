@@ -77,7 +77,19 @@ class RenderContext
     /// <summary>
     /// end the drawing of the next frame then present it
     /// </summary>
-    public void End() => target.EndDraw();
+    public void End()
+    {
+        foreach (var font in _fonts)
+            font.Value.Dispose();
+
+        foreach (var colour in _colours)
+            colour.Value.Dispose();
+
+        _fonts = new Dictionary<Tuple<string, float>, TextFormat>();
+        _colours = new Dictionary<Color4, SolidColorBrush>();
+
+        target.EndDraw();
+    }
 
     /// <summary>
     /// Clear the screen with the specified colour
