@@ -104,7 +104,7 @@ class Overlay : Form
             context.DrawLine(new Vector2(centerX, centerY - 4), new Vector2(centerX, centerY + 4), green, 2);
         }
 
-        context.FillRoundedRectangle(new Vector2(30, 30), new Vector2(150, 150), new Vector2(15, 15), Color4.Black);
+        //context.FillRoundedRectangle(new Vector2(30, 30), new Vector2(150, 150), new Vector2(15, 15), Color4.Black);
 
         context.End();
     }
