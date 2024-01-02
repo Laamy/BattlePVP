@@ -79,14 +79,14 @@ class RenderContext
     /// </summary>
     public void End()
     {
-        foreach (var font in _fonts)
-            font.Value.Dispose();
+        //foreach (var font in _fonts)
+        //    font.Value.Dispose();
 
-        foreach (var colour in _colours)
-            colour.Value.Dispose();
+        //foreach (var colour in _colours)
+        //    colour.Value.Dispose();
 
-        _fonts = new Dictionary<Tuple<string, float>, TextFormat>();
-        _colours = new Dictionary<Color4, SolidColorBrush>();
+        //_fonts = new Dictionary<Tuple<string, float>, TextFormat>();
+        //_colours = new Dictionary<Color4, SolidColorBrush>();
 
         target.EndDraw();
     }
