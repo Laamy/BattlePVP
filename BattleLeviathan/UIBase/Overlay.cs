@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Windows.Forms;
-using System.Drawing;
 
 using SharpDX;
 using SharpDX.Direct2D1;
 using SharpDX.DXGI;
+
+using Color = SharpDX.Color;
 
 using AlphaMode = SharpDX.Direct2D1.AlphaMode;
 using Factory = SharpDX.Direct2D1.Factory;
@@ -12,13 +13,12 @@ using TextAntialiasMode = SharpDX.Direct2D1.TextAntialiasMode;
 
 using static User32;
 using static Debug;
-using Color = SharpDX.Color;
 
 class Overlay : Form
 {
     public static Overlay handle;
 
-    private WindowRenderTarget target;
+    private RenderContext context;
     //private BitmapRenderTarget backTarget;
 
     public Overlay()
@@ -45,11 +45,6 @@ class Overlay : Form
         WinGraphics.InitDelegate(this.Handle); // hook the window event via delegate
     }
 
-    public SolidColorBrush GetBrush(Color4 colour)
-    {
-        return new SolidColorBrush(target, colour);
-    }
-
     private void InitializeDevice()
     {
         var factory = new Factory();
@@ -62,11 +57,11 @@ class Overlay : Form
 
         var renderTargetProperties = new RenderTargetProperties(new PixelFormat(Format.Unknown, AlphaMode.Premultiplied));
 
-        target = new WindowRenderTarget(factory, renderTargetProperties, properties)
+        context = new RenderContext(new WindowRenderTarget(factory, renderTargetProperties, properties)
         {
             TextAntialiasMode = TextAntialiasMode.Aliased,
             AntialiasMode = AntialiasMode.Aliased
-        };
+        });
 
         //backTarget = new BitmapRenderTarget(target, CompatibleRenderTargetOptions.None);
     }
@@ -85,22 +80,16 @@ class Overlay : Form
     public void OnAdjust(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime)
     {
         // get the rough dimensions of the window
-        ProcessRectangle rect = BattlefieldClient.WindowDims;
-
-        // Doesnt support maximized window
-        int x = rect.Left; // this should cover when your dragging the window around and alt + enter (f11) fullscreen
-        int y = rect.Top;
-        int width = rect.Right - rect.Left;
-        int height = rect.Bottom - rect.Top;
+        RectangleF rect = BattlefieldClient.WindowDims;
 
         // set the window where the battlefield game is (while also ontop)
-        SetWindowPos(Handle, BattlefieldClient.isFocusedInsert, x, y, width, height, 0x40);
+        SetWindowPos(Handle, BattlefieldClient.isFocusedInsert, (int)rect.Location.X, (int)rect.Location.Y, (int)rect.Size.Width, (int)rect.Size.Height, 0x40);
     }
 
     private void OnUpdate() // OnUpdate
     {
-        target.BeginDraw();
-        target.Clear(Color.White);
+        context.Begin();
+        context.Clear(Color.White);
 
         // lets check if the cursor is visible if so then we dont draw a crosshair
         if (BattlefieldClient.CanUseMoveKeys && !Keymap.GetDown(Keys.Tab)) // || Keymap.GetDown(Keys.Tab) later ig
@@ -109,45 +98,16 @@ class Overlay : Form
             int centerX = ClientSize.Width / 2;
             int centerY = ClientSize.Height / 2;
 
-            SolidColorBrush green = GetBrush(new Color4(0, 255, 0, 255));
+            Color4 green = new Color4(0, 255, 0, 255);
 
-            target.DrawLine(new Vector2(centerX - 4, centerY), new Vector2(centerX + 4, centerY), green, 2);
-            target.DrawLine(new Vector2(centerX, centerY - 4), new Vector2(centerX, centerY + 4), green, 2);
-
-            green.Dispose();
+            context.DrawLine(new Vector2(centerX - 4, centerY), new Vector2(centerX + 4, centerY), green, 2);
+            context.DrawLine(new Vector2(centerX, centerY - 4), new Vector2(centerX, centerY + 4), green, 2);
         }
 
-        //target.DrawLine(new Vector2(0,0), new Vector2(ClientSize.Width, ClientSize.Height), testBrush);
+        context.FillRoundedRectangle(new Vector2(30, 30), new Vector2(150, 150), new Vector2(15, 15), Color4.Black);
 
-        //var textFormat = new TextFormat(new SharpDX.DirectWrite.Factory(), "Arial", 12);
-        //target.DrawText("Hello, DirectX!", textFormat, new RectangleF(10, 120, 2000, 2000), testBrush);
-
-        target.EndDraw();
-
-        // present frame to screen
-        //Present(target, target);
+        context.End();
     }
-
-    //public void OnUpdate(object sender, PaintEventArgs e)
-    //{
-
-    //    Graphics g = e.Graphics;
-
-    //    //g.FillRectangle(new SolidBrush(Color.FromArgb(1, 255, 0, 0)), new RectangleF(new Point(0, 0), new SizeF(60, 60)));
-
-    //    // lets check if the cursor is visible if so then we dont draw a crosshair
-    //    if (BattlefieldClient.CanUseMoveKeys == true) // || Keymap.GetDown(Keys.Tab) later ig
-    //        return;
-
-    //    // lets quickly draw a test crosshair
-    //    int centerX = e.ClipRectangle.Width / 2;
-    //    int centerY = e.ClipRectangle.Height / 2;
-
-    //    Pen pen = new Pen(Color.Green, 2);
-
-    //    g.DrawLine(pen, centerX - 4, centerY, centerX + 4, centerY);
-    //    g.DrawLine(pen, centerX, centerY - 4, centerX, centerY + 4);
-    //}
 
     protected override void OnPaint(PaintEventArgs e)
     {
@@ -165,12 +125,12 @@ class Overlay : Form
     {
         base.OnResize(e);
 
-        target?.Resize(new Size2(ClientSize.Width, ClientSize.Height));
+        context?.target.Resize(new Size2(ClientSize.Width, ClientSize.Height));
     }
 
     protected override void Dispose(bool disposing)
     {
-        target?.Dispose();
+        context?.target.Dispose();
 
         base.Dispose(disposing);
     }

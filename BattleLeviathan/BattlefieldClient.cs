@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SharpDX;
+using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -68,16 +69,30 @@ class BattlefieldClient
     /// <summary>
     /// Window dimensions
     /// </summary>
-    public static ProcessRectangle WindowDims
+    public static RectangleF WindowDims // i love windows its so funny!!
     {
         get
         {
             CreateInstance(); // check create
 
-            ProcessRectangle rect;
-            GetWindowRect(WinHandle, out rect);
+            RectangleF output = new RectangleF();
+            ProcessRectangle rect; // temp
 
-            return rect;
+            {
+                GetClientRect(WinHandle, out rect);
+                output.Size = new Size2F(rect.Right, rect.Bottom);
+            }
+
+            {
+                GetWindowRect(WinHandle, out rect);
+
+                int width = rect.Right - rect.Left;
+                int height = rect.Bottom - rect.Top;
+
+                output.Location = new Vector2(rect.Left + ((width - output.Size.Width) / 2), rect.Top + (height - output.Size.Height) - ((rect.Left == 0 && rect.Top == 0) ? 0 : 8));
+            }
+
+            return output;
         }
     }
 

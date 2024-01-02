@@ -83,6 +83,9 @@ class User32
     public static extern uint GetWindowThreadProcessId(IntPtr hWnd, IntPtr voidProcessId);
 
     [DllImport("User32.dll", SetLastError = true)]
+    public static extern bool GetClientRect(IntPtr hWnd, out ProcessRectangle lpRect);
+
+    [DllImport("User32.dll", SetLastError = true)]
     public static extern bool GetWindowRect(IntPtr hWnd, out ProcessRectangle lpRect);
 
     [DllImport("User32.dll")]
