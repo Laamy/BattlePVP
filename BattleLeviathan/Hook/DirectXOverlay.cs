@@ -3,10 +3,12 @@ using System.Windows.Forms;
 
 using SharpDX;
 using SharpDX.Direct2D1;
+using SharpDX.DirectWrite;
 using SharpDX.DXGI;
 
 using AlphaMode = SharpDX.Direct2D1.AlphaMode;
 using Factory = SharpDX.Direct2D1.Factory;
+using TextAntialiasMode = SharpDX.Direct2D1.TextAntialiasMode;
 
 class DirectXOverlay : Form
 {
@@ -36,7 +38,8 @@ class DirectXOverlay : Form
 
         target = new WindowRenderTarget(factory, renderTargetProperties, properties)
         {
-            TextAntialiasMode = TextAntialiasMode.Cleartype
+            TextAntialiasMode = TextAntialiasMode.Aliased,
+            AntialiasMode = AntialiasMode.Aliased
         };
 
         testBrush = new SolidColorBrush(target, Color4.Black);
@@ -48,6 +51,9 @@ class DirectXOverlay : Form
         target.Clear(Color.White);
 
         target.DrawLine(new Vector2(10, 10), new Vector2(100, 100), testBrush);
+
+        var textFormat = new TextFormat(new SharpDX.DirectWrite.Factory(), "Arial", 12);
+        target.DrawText("Hello, DirectX!", textFormat, new RectangleF(10, 120, 2000, 2000), testBrush);
 
         target.EndDraw();
     }
