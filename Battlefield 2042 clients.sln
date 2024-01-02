@@ -5,6 +5,16 @@ VisualStudioVersion = 17.6.33815.320
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BattlePVP", "OhShitClient\BattlePVP.csproj", "{A15B580E-0057-430C-BA57-A863AFD96200}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BattleLeviathan", "BattleLeviathan\BattleLeviathan.csproj", "{2BE22D27-29CF-4E33-A3E4-EABA9B02BA3D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3EA0BCD1-C330-4416-B09F-ECA5B5DD9DF8}"
+	ProjectSection(SolutionItems) = preProject
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		LICENSE.txt = LICENSE.txt
+		README.md = README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +37,18 @@ Global
 		{A15B580E-0057-430C-BA57-A863AFD96200}.Release|x64.Build.0 = Release|x64
 		{A15B580E-0057-430C-BA57-A863AFD96200}.Release|x86.ActiveCfg = Release|x86
 		{A15B580E-0057-430C-BA57-A863AFD96200}.Release|x86.Build.0 = Release|x86
+		{2BE22D27-29CF-4E33-A3E4-EABA9B02BA3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2BE22D27-29CF-4E33-A3E4-EABA9B02BA3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2BE22D27-29CF-4E33-A3E4-EABA9B02BA3D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{2BE22D27-29CF-4E33-A3E4-EABA9B02BA3D}.Debug|x64.Build.0 = Debug|Any CPU
+		{2BE22D27-29CF-4E33-A3E4-EABA9B02BA3D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2BE22D27-29CF-4E33-A3E4-EABA9B02BA3D}.Debug|x86.Build.0 = Debug|Any CPU
+		{2BE22D27-29CF-4E33-A3E4-EABA9B02BA3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2BE22D27-29CF-4E33-A3E4-EABA9B02BA3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2BE22D27-29CF-4E33-A3E4-EABA9B02BA3D}.Release|x64.ActiveCfg = Release|Any CPU
+		{2BE22D27-29CF-4E33-A3E4-EABA9B02BA3D}.Release|x64.Build.0 = Release|Any CPU
+		{2BE22D27-29CF-4E33-A3E4-EABA9B02BA3D}.Release|x86.ActiveCfg = Release|Any CPU
+		{2BE22D27-29CF-4E33-A3E4-EABA9B02BA3D}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

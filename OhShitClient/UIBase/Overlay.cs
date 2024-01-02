@@ -85,6 +85,7 @@ class Overlay : Form
 
     public void OnUpdate(object sender, PaintEventArgs e)
     {
+        // i might just use an SDL window but also use winapi to set the border style & transparency key actually no i cant cuz sdl has none FJHFDJFDS direct x then
         //SDL.SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // clear form with nothing (Full transparency)
         //SDL.SDL_RenderClear(renderer);
 
@@ -97,6 +98,8 @@ class Overlay : Form
         //SDL.SDL_RenderPresent(renderer);
 
         Graphics g = e.Graphics;
+
+        //g.FillRectangle(new SolidBrush(Color.FromArgb(1, 255, 0, 0)), new RectangleF(new Point(0, 0), new SizeF(60, 60)));
 
         // lets check if the cursor is visible if so then we dont draw a crosshair
         if (BattlefieldClient.CanUseMoveKeys == true) // || Keymap.GetDown(Keys.Tab) later ig
