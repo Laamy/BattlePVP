@@ -2,6 +2,10 @@
 using SharpDX.Direct2D1;
 using SharpDX.DirectWrite;
 using SharpDX.Mathematics.Interop;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using RectangleF = SharpDX.RectangleF;
 using Vector2 = SharpDX.Vector2;
 
 class RenderContext
@@ -13,6 +17,9 @@ class RenderContext
         this.target = target;
     }
 
+    private Dictionary<Color4, SolidColorBrush> _colours = new Dictionary<Color4, SolidColorBrush>();
+    private Dictionary<Tuple<string, float>, TextFormat> _fonts = new Dictionary<Tuple<string, float>, TextFormat>();
+
     /// <summary>
     /// Get solidcolorbrush of colour
     /// </summary>
@@ -20,7 +27,11 @@ class RenderContext
     /// <returns></returns>
     public SolidColorBrush GetBrush(Color4 colour)
     {
-        return new SolidColorBrush(target, colour);
+        if (_colours.ContainsKey(colour))
+            return _colours[colour];
+
+        _colours.Add(colour, new SolidColorBrush(target, colour));
+        return _colours[colour];
     }
 
     /// <summary>
@@ -49,7 +60,13 @@ class RenderContext
     /// </summary>
     public TextFormat GetFont(string font, int size)
     {
-        return new TextFormat(new SharpDX.DirectWrite.Factory(), font, size);
+        Tuple<string, float> curTuple = new Tuple<string, float>(font, size);
+
+        if (_fonts.ContainsKey(curTuple))
+            return _fonts[curTuple];
+
+        _fonts.Add(curTuple, new TextFormat(new SharpDX.DirectWrite.Factory(), font, size));
+        return _fonts[curTuple];
     }
 
     /// <summary>

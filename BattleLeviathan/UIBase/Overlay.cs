@@ -13,6 +13,7 @@ using TextAntialiasMode = SharpDX.Direct2D1.TextAntialiasMode;
 
 using static User32;
 using static Debug;
+using System.Management.Instrumentation;
 
 class Overlay : Form
 {
@@ -71,6 +72,7 @@ class Overlay : Form
         // initialize winform here
         TopMost = true; // not needed
         TransparencyKey = System.Drawing.Color.White;
+        //Opacity = 1;
 
         FormBorderStyle = FormBorderStyle.None;
 
@@ -98,13 +100,13 @@ class Overlay : Form
             int centerX = ClientSize.Width / 2;
             int centerY = ClientSize.Height / 2;
 
-            Color4 green = new Color4(0, 255, 0, 255);
+            Color4 green = new Color4(0, 1, 0, 1);
 
             context.DrawLine(new Vector2(centerX - 4, centerY), new Vector2(centerX + 4, centerY), green, 2);
             context.DrawLine(new Vector2(centerX, centerY - 4), new Vector2(centerX, centerY + 4), green, 2);
         }
 
-        //context.FillRoundedRectangle(new Vector2(30, 30), new Vector2(150, 150), new Vector2(15, 15), Color4.Black);
+        context.DrawString("DEBUG MODE ACTIVE", new Vector2(10, 10), new Color4(1, 0, 0, 1), "Arial", 24);
 
         context.End();
     }
