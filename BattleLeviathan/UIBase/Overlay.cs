@@ -18,7 +18,7 @@ class Overlay : Form
 {
     public static Overlay handle;
 
-    private RenderContext context;
+    public RenderContext context;
     //private BitmapRenderTarget backTarget;
 
     public static string command = "";
@@ -63,7 +63,10 @@ class Overlay : Form
         {
             TextAntialiasMode = TextAntialiasMode.Aliased,
             AntialiasMode = AntialiasMode.Aliased
-        });
+        })
+        {
+            clearColour = Color.Magenta
+        };
 
         //backTarget = new BitmapRenderTarget(target, CompatibleRenderTargetOptions.None);
     }
@@ -92,7 +95,7 @@ class Overlay : Form
     private void OnUpdate() // OnUpdate
     {
         context.Begin();
-        context.Clear(Color.Magenta);
+        context.Clear(context.clearColour);
 
         // lets check if the cursor is visible if so then we dont draw a crosshair
         if (BattlefieldClient.CanUseMoveKeys && !BattlefieldClient.Keymap.GetDown(Keys.Tab)) // || Keymap.GetDown(Keys.Tab) later ig
@@ -107,8 +110,8 @@ class Overlay : Form
             context.DrawLine(new Vector2(centerX, centerY - 4), new Vector2(centerX, centerY + 4), green, 2);
         }
 
-        if (Program.CmdBar)
         {
+        if (Program.CmdBar)
             // console title
             context.FillRectangle(new Vector2(30,30), new Vector2(150, 18), Color4.White);
 

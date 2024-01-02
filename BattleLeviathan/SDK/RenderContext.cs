@@ -1,16 +1,19 @@
-﻿using SharpDX;
+﻿using System;
+using System.Collections.Generic;
+
+using SharpDX;
 using SharpDX.Direct2D1;
 using SharpDX.DirectWrite;
 using SharpDX.Mathematics.Interop;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
+
+using Color = SharpDX.Color;
 using RectangleF = SharpDX.RectangleF;
 using Vector2 = SharpDX.Vector2;
 
 class RenderContext
 {
     public WindowRenderTarget target;
+    public Color4 clearColour;
 
     public RenderContext(WindowRenderTarget target)
     {

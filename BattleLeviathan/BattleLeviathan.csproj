@@ -195,8 +195,10 @@
   <ItemGroup>
     <Compile Include="BattlefieldClient.cs" />
     <Compile Include="Command\Command.cs" />
-    <Compile Include="Command\Commands\CommandManager.cs" />
+    <Compile Include="Command\CommandManager.cs" />
+    <Compile Include="Command\Commands\ClearColourCommand.cs" />
     <Compile Include="Command\Commands\HelpCommand.cs" />
+    <Compile Include="Command\Commands\OpacityCommand.cs" />
     <Compile Include="SDK\ProcessRectangle.cs" />
     <Compile Include="Debug.cs" />
     <Compile Include="Environment.cs" />

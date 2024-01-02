@@ -64,6 +64,11 @@ class Program
                         Overlay.command += e.key.ToString().ToLower();
                 }
 
+                if (e.key.ToString().Length == 2)
+                {
+                    Overlay.command += e.key.ToString().Substring(1, 1);
+                }
+
                 if (e.key == Keys.Space)
                     Overlay.command += " ";
 

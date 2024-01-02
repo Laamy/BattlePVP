@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Runtime.ConstrainedExecution;
 using System.Text.RegularExpressions;
 
 class CommandManager
@@ -9,6 +8,8 @@ class CommandManager
     public void Init()
     {
         _commands.Add(new HelpCommand());
+        _commands.Add(new OpacityCommand());
+        _commands.Add(new ClearColourCommand());
     }
 
     public bool SendCommand(string cmd)
