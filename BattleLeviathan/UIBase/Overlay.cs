@@ -21,6 +21,11 @@ class Overlay : Form
     public RenderContext context;
     //private BitmapRenderTarget backTarget;
 
+    public void DelegateCode(Action code)
+    {
+        Invoke((MethodInvoker)delegate { code(); });
+    }
+
     public static string command = "";
 
     public Overlay()
@@ -76,7 +81,7 @@ class Overlay : Form
         // initialize winform here
         TopMost = true; // not needed
         TransparencyKey = System.Drawing.Color.Magenta;
-        //Opacity = 1;
+        //Opacity = 0.8f;
 
         FormBorderStyle = FormBorderStyle.None;
 
@@ -92,10 +97,36 @@ class Overlay : Form
         SetWindowPos(Handle, BattlefieldClient.isFocusedInsert, (int)rect.Location.X, (int)rect.Location.Y, (int)rect.Size.Width, (int)rect.Size.Height, 0x40);
     }
 
+    //private float GaussianBlur(float x, float y, float deviation)
+    //{
+    //    return (float)(1.0 / (2.0 * Math.PI * deviation * deviation) * Math.Exp(-(x * x + y * y) / (2.0 * deviation * deviation)));
+    //}
+
+    int a = 0;
+
+    public static bool AllowShaders = false;
+
     private void OnUpdate() // OnUpdate
     {
         context.Begin();
-        context.Clear(context.clearColour);
+        context.Clear(Color.Magenta);
+
+        if (AllowShaders)
+        {
+            Random random = new Random(0);
+
+            for (int x = 0; x < ClientSize.Width; x++)
+            {
+                for (int y = 0; y < ClientSize.Height; y++)
+                {
+                    byte alpha = (byte)random.Next(256);
+
+                    Color4 color = new Color4(alpha, alpha, alpha, alpha / 255.0f);
+
+                    context.FillRectangle(new Vector2(x, y), new Vector2(1, 1), color);
+                }
+            }
+        }
 
         // lets check if the cursor is visible if so then we dont draw a crosshair
         if (BattlefieldClient.CanUseMoveKeys && !BattlefieldClient.Keymap.GetDown(Keys.Tab)) // || Keymap.GetDown(Keys.Tab) later ig
@@ -110,10 +141,10 @@ class Overlay : Form
             context.DrawLine(new Vector2(centerX, centerY - 4), new Vector2(centerX, centerY + 4), green, 2);
         }
 
-        {
         if (Program.CmdBar)
+        {
             // console title
-            context.FillRectangle(new Vector2(30,30), new Vector2(150, 18), Color4.White);
+            context.FillRectangle(new Vector2(30, 30), new Vector2(150, 18), Color4.White);
 
             // shadow'd string
             context.DrawString("Console", new Vector2(39, 30), new Color4(0.3f, 0.3f, 0.3f, 1), "System", 12);

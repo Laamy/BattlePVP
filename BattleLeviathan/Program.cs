@@ -43,9 +43,8 @@ class Program
 
     private static void OnKey(object sender, KeyEvent e)
     {
-        if (e.vkey != VKeyCodes.KeyHeld)
-            Debug.Log($"{e.vkey} {e.key}:{(int)e.key}");
-
+        //if (e.vkey != VKeyCodes.KeyHeld)
+            //Debug.Log($"{e.vkey} {e.key}:{(int)e.key}"
         if (e.vkey == VKeyCodes.KeyDown)
         {
             if (e.key == Keys.L && BattlefieldClient.Keymap.GetDown(Keys.ControlKey))

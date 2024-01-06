@@ -24,12 +24,12 @@ class BattlefieldClient
     /// <summary>
     /// Executable name of the game
     /// </summary>
-    public static string GameName = "BF2042";
+    public static string GameName = "BF2042"; // BF2042
 
     /// <summary>
     /// Title name of the game
     /// </summary>
-    public static string GameTitle = "Battlefield™ 2042";
+    public static string GameTitle = "Battlefield™ 2042"; // Battlefield™ 2042
 
     /// <summary>
     /// Get information about the game keymap & events

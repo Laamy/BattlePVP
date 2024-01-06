@@ -199,6 +199,7 @@
     <Compile Include="Command\Commands\ClearColourCommand.cs" />
     <Compile Include="Command\Commands\HelpCommand.cs" />
     <Compile Include="Command\Commands\OpacityCommand.cs" />
+    <Compile Include="Command\Commands\ShaderPackCcommand.cs" />
     <Compile Include="SDK\ProcessRectangle.cs" />
     <Compile Include="Debug.cs" />
     <Compile Include="Environment.cs" />

@@ -10,6 +10,7 @@ class CommandManager
         _commands.Add(new HelpCommand());
         _commands.Add(new OpacityCommand());
         _commands.Add(new ClearColourCommand());
+        _commands.Add(new ShaderPackCommand());
     }
 
     public bool SendCommand(string cmd)

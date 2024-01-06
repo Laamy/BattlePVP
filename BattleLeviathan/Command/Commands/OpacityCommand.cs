@@ -12,7 +12,10 @@ class OpacityCommand : Command
             int outp = 0;
 
             if (int.TryParse(cmd[0], out outp))
-                Overlay.handle.Opacity = outp;
+                Overlay.handle.DelegateCode(() =>
+                {
+                    Overlay.handle.Opacity = outp / 255;
+                });
             else Debug.Log("Invalid argument");
         }
 
